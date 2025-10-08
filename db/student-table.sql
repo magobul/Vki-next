@@ -4,5 +4,6 @@ CREATE TABLE student(
     first_name TEXT,
     last_name TEXT,
     middle_name TEXT,
-    groupId INTEGER
+    groupId INTEGER,
+    isDeleted boolean
 );

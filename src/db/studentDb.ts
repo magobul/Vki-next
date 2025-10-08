@@ -2,7 +2,26 @@ import sqlite3 from 'sqlite3';
 
 import type StudentInterface from '@/types/StudentInterface';
 
+
 sqlite3.verbose();
+
+export const deleteStudentDb = async (studentId: number): Promise<number> => {
+  const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
+
+  await new Promise((resolve, reject) => {
+    db.run('DELETE FROM student WHERE id=?', [studentId], (err) => {
+      if (err) {
+        reject(err);
+        db.close();
+        return;
+      }
+      resolve(studentId);
+      db.close();
+    });
+  });
+
+  return studentId;
+};
 
 export const getStudentDb = async (): Promise<StudentInterface[]> => {
   const db = new sqlite3.Database(process.env.DB ?? './db/vki-web.db');
@@ -19,16 +38,6 @@ export const getStudentDb = async (): Promise<StudentInterface[]> => {
       db.close();
     });
   });
-
-  // test data
-  // const groups: GroupInterface[] = [
-  //   {
-  //     name: '2207 д2',
-  //   },
-  //   {
-  //     name: '2207 д2',
-  //   },
-  // ];
 
   return students as StudentInterface[];
 };
